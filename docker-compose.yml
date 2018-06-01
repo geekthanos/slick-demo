@@ -1,0 +1,32 @@
+cqldb:
+  container_name: '${DC_CASSANDRA}'
+  image: '${REPO_CASSANDRA}'
+  ports:
+    - '8983:8983'
+    - '9042:9042'
+  expose:
+    - '8983'
+    - '9042'
+
+elasticsearch:
+  container_name: '${DC_ES}'
+  image: '${REPO_ES}'
+  environment:
+    - 'http.host=0.0.0.0'
+    - 'transport.host=127.0.0.1'
+  ports:
+    - '9200:9200'
+  links:
+    - cqldb:cqldb
+
+kibana:
+  container_name: '${DC_KIBANA}'
+  image: '${REPO_KIBANA}'
+  environment:
+    - 'XPACK-SECURITY-ENABLED=false'
+  ports:
+    - '5601:5601'
+  expose:
+    - '5601'
+  links:
+    - elasticsearch:elasticsearch
