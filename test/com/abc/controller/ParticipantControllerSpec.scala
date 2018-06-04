@@ -48,19 +48,11 @@ class ParticipantControllerSpec extends PlaySpec with Results with BeforeAndAfte
     "should be able to save a valid user event" in {
       val controller = fakeApp.injector.instanceOf[com.abc.controller.ParticipantController]
       val request=FakeRequest(POST,"/v1/participant")
-           .withJsonBody(Json.parse("""{ "field": "PF" }"""))
+  //         .withJsonBody(Json.parse("""{ "field": "PF" }"""))
+        .withJsonBody(Json.parse("""{ "field": "PF/00.0.0 (abc.xyz abc os x.x.x)" }"""))
       val result: Future[Result] = controller.save().apply(request)
       val bodyText: String = contentAsString(result)
       bodyText mustBe "Saved participant!"
-    }
-    "it should throw an exception on an invalid event" in {
-      val controller = fakeApp.injector.instanceOf[com.abc.controller.ParticipantController]
-      val request=FakeRequest(POST,"/v1/participant")
-        .withJsonBody(Json.parse("""{ "field": "PF/00.0.0 (abc.xyz abc os x.x.x)" }"""))
-      a[JsonParseException] must be thrownBy {
-      val result: Future[Result] = controller.save().apply(request)
-        val bodyText: String = contentAsString(result)
-      }
     }
   }
 
